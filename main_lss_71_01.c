@@ -8,8 +8,6 @@
 
 int flag_d = 0, flag_e = 0, flag_p = 0, flag_t = 0, flag_h = 0, flag_q = 0, max_iter = 0;
 
-double precision = 1e-14, epsilon = 1e-10;
-
 size_t lss_memsize_71_01(int n) { return n * sizeof(double); }
 
 int stringLength(char const *input) {
@@ -21,6 +19,7 @@ int stringLength(char const *input) {
 }
 
 int validateFile(char *filename) {
+    printf("%s", filename);
     FILE *f = fopen(filename, "rb");
     int result = f != NULL;
     return result;
@@ -114,13 +113,13 @@ int readInput(char *inputFile, double **A, double **B, int *n) {
 
 void writeAnswer(char *outputFile, int n, const double *X, int result) {
     int i;
-    FILE *out = fopen(outputFile, "w");
+    FILE *output = fopen(outputFile, "w");
     if (result == -1) {
-        fprintf(out, "%d\n", 0);
+        fprintf(output, "%d\n", 0);
     } else {
-        fprintf(out, "%d\n", n);
+        fprintf(output, "%d\n", n);
         for (i = 0; i < n; i++) {
-            fprintf(out, "%1.9lf\n", *(X + i));
+            fprintf(output, "%1.9lf\n", *(X + i));
         }
     }
 }
@@ -262,7 +261,7 @@ int main(int argc, char *argv[]) {
 
     // free(tmp);
     // tmp = malloc(evc_memsize_01_03(n));
-
+    lss_71_01(n, A, B, X, tmp);
     // int result = evc_01_03(n, max_iter, epsilon, A, E, tmp, precision);
     clock_t end = clock();
 
@@ -276,8 +275,11 @@ int main(int argc, char *argv[]) {
         printf("Execution time: %1.9lf\n", timeSpent);
     }
 
-    // writeAnswer(outputFile, n, E, result);
+    // writeAnswer(outputFile, n, X, 1);
 
     // return result;
+
+    free(tmp);
+    free(X);
     return 0;
 }
