@@ -8,8 +8,6 @@
 
 int flag_d = 0, flag_e = 0, flag_p = 0, flag_t = 0, flag_h = 0, flag_q = 0, max_iter = 0;
 
-size_t lss_memsize_71_01(int n) { return n * sizeof(double); }
-
 int stringLength(char const *input) {
     int length = 0;
     while (input[length] != '\0') {
@@ -249,20 +247,12 @@ int main(int argc, char *argv[]) {
     X = malloc(n * sizeof(double));
 
     clock_t begin = clock();
-    // if (sim_01_03(n, A, tmp, precision) == -1) {
-    //     if (flag_e) printf("ValidationError. Matrix is not symmetric.\n");
-    //     writeAnswer(outputFile, n, E, -1);
-    //     return -1;
-    // }
 
     if (flag_p) {
         print(n, A);
     }
 
-    // free(tmp);
-    // tmp = malloc(evc_memsize_01_03(n));
     lss_71_01(n, A, B, X, tmp);
-    // int result = evc_01_03(n, max_iter, epsilon, A, E, tmp, precision);
     clock_t end = clock();
 
     if (flag_p) {
