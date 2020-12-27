@@ -6,7 +6,7 @@
 
 #include "lss_71_01.h"
 
-int flag_d = 0, flag_e = 0, flag_p = 0, flag_t = 0, flag_h = 0, flag_q = 0, max_iter = 0;
+int flag_d = 0, flag_e = 0, flag_p = 0, flag_t = 0, flag_h = 0, max_iter = 0;
 
 int stringLength(char const *input) {
     int length = 0;
@@ -41,7 +41,8 @@ int validateParams(int argc, char **argv) {
                     break;
                 }
                 case '?': {
-                    flag_q = 1;
+                    flag_h = 1;
+                    break;
                 }
                 case 'e': {
                     flag_e = 1;
@@ -170,7 +171,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (flag_q || flag_h) {
+    if (flag_h) {
         printHelp();
         return 0;
     }
