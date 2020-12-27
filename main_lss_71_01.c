@@ -10,7 +10,7 @@ int flag_d = 0, flag_e = 0, flag_p = 0, flag_t = 0, flag_h = 0, flag_q = 0, max_
 
 double precision = 1e-14, epsilon = 1e-10;
 
-size_t lss_memsize_71_01(int n) { return n; }
+size_t lss_memsize_71_01(int n) { return n * sizeof(double); }
 
 int stringLength(char const *input) {
     int length = 0;
@@ -133,7 +133,7 @@ void printHelp() {
         " -e                print errors [default OFF]\n"
         " -p                print matrix [default OFF]\n"
         " -t                print execution time [default OFF]\n"
-        " -h, -?            print this and exit");
+        " -h, -?            print this and exit\n");
 }
 
 void print(int n, double *A) {
@@ -149,7 +149,7 @@ void print(int n, double *A) {
 
 int main(int argc, char *argv[]) {
     int n, setInput = 0;
-    double *A, *B, *tmp;
+    double *A, *B, *X, *tmp;
     char *inputFile = "lss_71_01_in.txt";
     char *outputFile = "lss_71_01_out.txt";
 
@@ -246,8 +246,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    tmp = malloc(sim_memsize_01_03(n));
-    // E = malloc(n * sizeof(double));
+    tmp = malloc(lss_memsize_71_01(n));
+    X = malloc(n * sizeof(double));
 
     clock_t begin = clock();
     // if (sim_01_03(n, A, tmp, precision) == -1) {
