@@ -10,6 +10,8 @@ int flag_d = 0, flag_e = 0, flag_p = 0, flag_t = 0, flag_h = 0, flag_q = 0, max_
 
 double precision = 1e-14, epsilon = 1e-10;
 
+size_t lss_memsize_71_01(int n) { return n; }
+
 int stringLength(char const *input) {
     int length = 0;
     while (input[length] != '\0') {
@@ -154,13 +156,15 @@ int main(int argc, char *argv[]) {
     switch (validateParams(argc, argv)) {
         case 1: {
             if (flag_e) {
-                printf("ValidationError: Wrong syntax of parameters. There are more than two filenames\n");
+                printf("ValidationError: Wrong syntax of parameters. Too much filenames\n");
             }
             return 11;
         }
         case 2: {
             if (flag_e) {
-                printf("ValidationError. Wrong syntax of parameters. There is no such parameter or you haven't set value to one of the parameters\n");
+                printf(
+                    "ValidationError. Wrong syntax of parameters. There is no such parameter or "
+                    "you haven't set value to one of the parameters\n");
             }
             return 2;
         }
@@ -242,7 +246,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    // tmp = malloc(sim_memsize_01_03(n));
+    tmp = malloc(sim_memsize_01_03(n));
     // E = malloc(n * sizeof(double));
 
     clock_t begin = clock();
