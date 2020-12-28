@@ -17,7 +17,6 @@ int stringLength(char const *input) {
 }
 
 int validateFile(char *filename) {
-    printf("%s", filename);
     FILE *f = fopen(filename, "rb");
     int result = f != NULL;
     return result;
@@ -134,19 +133,20 @@ void printHelp() {
         " -h, -?            print this and exit\n");
 }
 
-void print(int n, double *A) {
+void printSystem(int n, double *A, double *B) {
     int i, j;
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            printf("%1.9lf ", *(A + i * n + j));
+            printf("%1.2lf ", A[i * n + j]);
         }
+        printf("   %1.2lf", B[i]);
         printf("\n");
     }
     printf("\n");
 }
 
 int main(int argc, char *argv[]) {
-    int n, setInput = 0;
+    int n = 0, setInput = 0, i = 0;
     double *A, *B, *X, *tmp;
     char *inputFile = "lss_71_01_in.txt";
     char *outputFile = "lss_71_01_out.txt";
@@ -250,14 +250,14 @@ int main(int argc, char *argv[]) {
     clock_t begin = clock();
 
     if (flag_p) {
-        print(n, A);
+        printSystem(n, A, B);
     }
 
     lss_71_01(n, A, B, X, tmp);
     clock_t end = clock();
 
     if (flag_p) {
-        print(n, A);
+        printSystem(n, A, B);
     }
 
     double timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
@@ -270,7 +270,13 @@ int main(int argc, char *argv[]) {
 
     // return result;
 
+    printf("\nX:\n");
+    for (i = 0; i < n; i++) {
+        printf("%lf ", X[i]);
+    }
+
     free(tmp);
     free(X);
+
     return 0;
 }
