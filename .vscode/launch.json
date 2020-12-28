@@ -5,7 +5,12 @@
             "name": "gcc.exe - Build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main_lss_71_01.exe",
+            "windows": {
+                "program": "${workspaceFolder}/main_lss_71_01.exe",
+            },
+            "linux": {
+                "program": "${workspaceFolder}/main_lss_71_01",
+            },
             "args": [
                 "input.txt",
                 "output.txt",
