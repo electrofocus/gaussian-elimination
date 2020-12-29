@@ -56,9 +56,11 @@ int validateParams(int argc, char **argv) {
                     break;
                 }
                 default: {
-                    return 2;
+                    return 3;
                 }
             }
+        } else if (argv[i][0] == '-') {
+            return 2;
         } else {
             count++;
         }
@@ -76,11 +78,11 @@ int readInput(char *inputFile, double **A, double **B, int *n) {
 
     checkInput = fscanf(input, "%d", n);
     if (checkInput == EOF) {
-        return 6;
+        return 4;
     }
 
     if (checkInput == 0 || *n <= 0) {
-        return 7;
+        return 1;
     }
 
     *A = malloc((*n) * (*n) * sizeof(double));
@@ -89,20 +91,20 @@ int readInput(char *inputFile, double **A, double **B, int *n) {
     for (i = 0; i < (*n) * (*n); i++) {
         checkInput = fscanf(input, "%lf", (*A + i));
         if (checkInput == EOF) {
-            return 8;
+            return 2;
         }
         if (checkInput == 0) {
-            return 9;
+            return 3;
         }
     }
 
     for (i = 0; i < (*n); i++) {
         checkInput = fscanf(input, "%lf", (*B + i));
         if (checkInput == EOF) {
-            return 8;
+            return 5;
         }
         if (checkInput == 0) {
-            return 9;
+            return 3;
         }
     }
 
@@ -112,7 +114,7 @@ int readInput(char *inputFile, double **A, double **B, int *n) {
 void writeAnswer(char *outputFile, int n, const double *X, int result) {
     int i;
     FILE *output = fopen(outputFile, "w");
-    if (result == -1) {
+    if (result != 0) {
         fprintf(output, "%d\n", 0);
     } else {
         fprintf(output, "%d\n", n);
@@ -137,16 +139,16 @@ void printSystem(int n, double *A, double *B) {
     int i, j;
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            printf("%1.2lf ", A[i * n + j]);
+            printf("%1.9lf ", A[i * n + j]);
         }
-        printf("   %1.2lf", B[i]);
+        printf("\t%1.9lf", B[i]);
         printf("\n");
     }
     printf("\n");
 }
 
 int main(int argc, char *argv[]) {
-    int n = 0, setInput = 0, i = 0;
+    int n = 0, setInput = 0, i = 0, result = 0;
     double *A, *B, *X, *tmp;
     char *inputFile = "lss_71_01_in.txt";
     char *outputFile = "lss_71_01_out.txt";
@@ -215,29 +217,29 @@ int main(int argc, char *argv[]) {
     }
 
     switch (readInput(inputFile, &A, &B, &n)) {
-        case 6: {
+        case 4: {
             if (flag_e) {
                 printf("ValidationError. File is empty.\n");
             }
             return 6;
         }
-        case 7: {
+        case 1: {
             if (flag_e) {
                 printf("ValidationError. n is not a positive integer.\n");
             }
-            return 7;
+            return 5;
         }
-        case 8: {
+        case 2: {
             if (flag_e) {
                 printf("ValidationError. Not enough elements in the matrix.\n");
             }
-            return 8;
+            return 6;
         }
-        case 9: {
+        case 3: {
             if (flag_e) {
                 printf("ValidationError. One of the elements of the matrix is not a number.\n");
             }
-            return 9;
+            return 7;
         }
         default: {
             break;
@@ -253,7 +255,7 @@ int main(int argc, char *argv[]) {
         printSystem(n, A, B);
     }
 
-    lss_71_01(n, A, B, X, tmp);
+    result = lss_71_01(n, A, B, X, tmp);
     clock_t end = clock();
 
     if (flag_p) {
@@ -266,17 +268,10 @@ int main(int argc, char *argv[]) {
         printf("Execution time: %1.9lf\n", timeSpent);
     }
 
-    // writeAnswer(outputFile, n, X, 1);
-
-    // return result;
-
-    printf("\nX:\n");
-    for (i = 0; i < n; i++) {
-        printf("%lf ", X[i]);
-    }
+    writeAnswer(outputFile, n, X, result);
 
     free(tmp);
     free(X);
 
-    return 0;
+    return result;
 }
