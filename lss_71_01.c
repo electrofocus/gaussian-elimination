@@ -7,6 +7,7 @@
 #include <math.h>
 
 double const EPS = 1e-25;
+extern int flag_d;
 
 size_t lss_memsize_71_01(int n) { return n * sizeof(double); }
 
@@ -45,7 +46,7 @@ void swapCols(int n, int k, int idx, double *A, double *cols) {
 
 int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
     int i = 0, k = 0, j = 0, idx = 0;
-    double t, sum = 0;
+    double t, sum = 0, divider = 1, multiplier = 0;
 
     // Запомнить позиции колонок и проинициализировать вектор X
 
@@ -61,34 +62,40 @@ int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
 
         if (idx == -1) {
             if (B[k] > EPS) {
+                if (flag_d) {
+                    printf("\nSystem has no solution\n");
+                }
                 return 1;
             }
             X[k] = 0;
+            k++;
+            continue;
         }
 
         if (idx != k) {
             swapCols(n, k, idx, A, cols);
-            printf("swap %d with %d\n", k, idx);
+
+            if (flag_d) {
+                printf("\n%d <-> %d\n", k, idx);
+            }
         }
 
-        printSystem(n, A, B);
-
-        t = A[k * n + k];
-        for (j = 0; j < n; j++) {
-            A[k * n + j] = A[k * n + j] / t;
+        if (flag_d) {
+            printSystem(n, A, B);
         }
-        B[k] = B[k] / t;
 
         for (i = k + 1; i < n; i++) {
-            t = A[i * n + k];  // / A[k * n + k];
+            multiplier = A[i * n + k] / A[k * n + k];
 
             for (j = 0; j < n; j++) {
-                A[i * n + j] = A[i * n + j] - A[k * n + j] * t;
+                A[i * n + j] = A[i * n + j] - A[k * n + j] * multiplier;
             }
-            B[i] = B[i] - B[k] * t;
+            B[i] = B[i] - B[k] * multiplier;
         }
 
-        printSystem(n, A, B);
+        if (flag_d) {
+            printSystem(n, A, B);
+        }
     }
 
     // Обратный ход
@@ -103,20 +110,42 @@ int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
         }
     }
 
-    for (j = 0; j < n; j++) {
-        printf("%1.9lf ", cols[j]);
-    }
-    printf("\n\n");
-
     // Перестановка элементов вектора-ответа
-
-    for (j = 0; j < n; j++) {
-        t = X[(int)cols[j]];
-        X[(int)cols[j]] = X[j];
-        X[j] = t;
-
-        t = cols[(int)cols[j]];
-        cols[(int)cols[j]] = cols[j];
-        cols[j] = t;
+    printf("\n");
+    for (k = 0; k < n; k++) {
+        printf("%f ", cols[k]);
     }
+    printf("\n");
+    for (k = 0; k < n; k++) {
+        printf("%f ", X[k]);
+    }
+    printf("\n");
+
+    for (i = 0; i < n; i++) {
+        for (j = i; j < n; j++) {
+            if ((int)cols[j] == i) {
+                t = X[i];
+                X[i] = X[j];
+                X[j] = t;
+
+                t = cols[i];
+                cols[i] = cols[j];
+                cols[j] = t;
+
+                break;
+            }
+        }
+
+        printf("\n");
+        for (k = 0; k < n; k++) {
+            printf("%f ", cols[k]);
+        }
+        printf("\n");
+        for (k = 0; k < n; k++) {
+            printf("%f ", X[k]);
+        }
+        printf("\n");
+    }
+
+    return 0;
 }
