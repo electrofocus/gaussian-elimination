@@ -29,7 +29,7 @@ void swapCols(int n, int k, int idx, double *A, double *cols) {
     int i = 0;
     double tmp;
 
-    // Переставить колонки местами
+    // Перестановка колонок
 
     for (i = 0; i < n; i++) {
         tmp = A[i * n + k];
@@ -37,11 +37,11 @@ void swapCols(int n, int k, int idx, double *A, double *cols) {
         A[i * n + idx] = tmp;
     }
 
-    // Переставить номера колонок
+    // Перестановка номеров колонок
 
-    i = cols[k];
+    tmp = cols[k];
     cols[k] = cols[idx];
-    cols[idx] = i;
+    cols[idx] = tmp;
 }
 
 int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
@@ -57,26 +57,35 @@ int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
 
     // Прямой ход
 
-    for (k = 0; k < n - 1; k++) {
+    for (k = 0; k < n; k++) {
         idx = maxColIdx(n, k, A);
 
+        // Если в строке все нули
+
         if (idx == -1) {
-            if (B[k] > EPS) {
+            // Если в правой части не ноль
+
+            if (fabs(B[k]) > EPS) {
                 if (flag_d) {
                     printf("\nSystem has no solution\n");
                 }
                 return 1;
             }
             X[k] = 0;
-            k++;
             continue;
+        }
+
+        // Выход на последней итерации
+
+        if (k == n - 1) {
+            break;
         }
 
         if (idx != k) {
             swapCols(n, k, idx, A, cols);
 
             if (flag_d) {
-                printf("\n%d <-> %d\n", k, idx);
+                printf("%d <-> %d\n\n", k, idx);
             }
         }
 
@@ -111,15 +120,18 @@ int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
     }
 
     // Перестановка элементов вектора-ответа
-    printf("\n");
-    for (k = 0; k < n; k++) {
-        printf("%f ", cols[k]);
+
+    if (flag_d) {
+        printf("\ncols: ");
+        for (k = 0; k < n; k++) {
+            printf("%f ", cols[k]);
+        }
+        printf("\n  X:");
+        for (k = 0; k < n; k++) {
+            printf("%f ", X[k]);
+        }
+        printf("\n");
     }
-    printf("\n");
-    for (k = 0; k < n; k++) {
-        printf("%f ", X[k]);
-    }
-    printf("\n");
 
     for (i = 0; i < n; i++) {
         for (j = i; j < n; j++) {
@@ -136,15 +148,17 @@ int lss_71_01(int n, double *A, double *B, double *X, double *cols) {
             }
         }
 
-        printf("\n");
-        for (k = 0; k < n; k++) {
-            printf("%f ", cols[k]);
+        if (flag_d) {
+            printf("\ncols: ");
+            for (k = 0; k < n; k++) {
+                printf("%f ", cols[k]);
+            }
+            printf("\n  X: ");
+            for (k = 0; k < n; k++) {
+                printf("%f ", X[k]);
+            }
+            printf("\n");
         }
-        printf("\n");
-        for (k = 0; k < n; k++) {
-            printf("%f ", X[k]);
-        }
-        printf("\n");
     }
 
     return 0;

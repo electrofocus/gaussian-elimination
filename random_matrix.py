@@ -2,8 +2,8 @@ import numpy as np
 
 n = int(input("Type matrix size: "))
 
-A = np.random.rand(n, n)
-X = np.random.rand(n)
+A = np.random.rand(n, n) * 50
+X = np.random.rand(n) * 50
 
 b = A @ X
 
