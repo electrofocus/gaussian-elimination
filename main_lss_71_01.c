@@ -19,6 +19,7 @@ int stringLength(char const *input) {
 int validateFile(char *filename) {
     FILE *f = fopen(filename, "rb");
     int result = f != NULL;
+    fclose(f);
     return result;
 }
 
@@ -108,12 +109,14 @@ int readInput(char *inputFile, double **A, double **B, int *n) {
         }
     }
 
+    fclose(input);
     return 0;
 }
 
 void writeAnswer(char *outputFile, int n, const double *X, int result) {
     int i;
     FILE *output = fopen(outputFile, "w");
+
     if (result != 0) {
         fprintf(output, "%d\n", 0);
     } else {
@@ -122,6 +125,8 @@ void writeAnswer(char *outputFile, int n, const double *X, int result) {
             fprintf(output, "%1.9lf\n", *(X + i));
         }
     }
+
+    fclose(output);
 }
 
 void printHelp() {
