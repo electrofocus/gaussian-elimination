@@ -44,6 +44,24 @@ void swapCols(int n, int k, int idx, double *A, int *cols) {
   cols[idx] = tmp;
 }
 
+void printCols(int n, int *cols) {
+  int k;
+
+  printf("\ncols: ");
+  for (k = 0; k < n; k++) {
+    printf("%d ", cols[k]);
+  }
+}
+
+void printX(int n, double *X) {
+  int k;
+
+  printf("\n   X: ");
+  for (k = 0; k < n; k++) {
+    printf("%lf ", X[k]);
+  }
+}
+
 int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
   int i = 0, k = 0, j = 0, idx = 0;
   int *cols = (int *)tmp;
@@ -123,15 +141,9 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
   // Перестановка элементов вектора-ответа
 
   if (flag_debug) {
-    printf("\ncols: ");
-    for (k = 0; k < n; k++) {
-      printf("%f ", cols[k]);
-    }
-    printf("\n  X:");
-    for (k = 0; k < n; k++) {
-      printf("%f ", X[k]);
-    }
-    printf("\n");
+    printCols(n, cols);
+    printX(n, X);
+    printf("\n\n");
   }
 
   for (i = 0; i < n; i++) {
@@ -150,15 +162,9 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
     }
 
     if (flag_debug) {
-      printf("\ncols: ");
-      for (k = 0; k < n; k++) {
-        printf("%f ", cols[k]);
-      }
-      printf("\n  X: ");
-      for (k = 0; k < n; k++) {
-        printf("%f ", X[k]);
-      }
-      printf("\n");
+      printCols(n, cols);
+      printX(n, X);
+      printf("\n\n");
     }
   }
 
