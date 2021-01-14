@@ -20,10 +20,13 @@ unsigned int stringLength(char const *input) {
 
 int validateFile(char const *filename) {
     FILE *f = fopen(filename, "rb");
-    int result = f != NULL;
+    int err = f == NULL;
 
-    fclose(f);
-    return result;
+    if (!err) {
+        fclose(f);
+    }
+
+    return err;
 }
 
 int validateParams(int argc, char **argv) {
@@ -218,7 +221,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (!setInput) {
-        if (!validateFile(inputFile)) {
+        if (validateFile(inputFile)) {
             if (flag_errors) {
                 printf("ValidationError: There is no such file.\n");
             }
