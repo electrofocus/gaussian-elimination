@@ -2,7 +2,7 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: gcc.exe build project",
+            "label": "C/C++: gcc build project",
             "command": "gcc",
             "args": [
                 "-g",
