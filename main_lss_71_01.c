@@ -201,7 +201,7 @@ int main(int argc, char *argv[]) {
                     return 4;
                 }
                 inputFile = argv[i];
-                if (!validateFile(inputFile)) {
+                if (validateFile(inputFile)) {
                     if (flag_errors) {
                         printf("ValidationError: There is no such file.\n");
                     }
