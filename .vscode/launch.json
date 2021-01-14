@@ -6,10 +6,10 @@
             "type": "cppdbg",
             "request": "launch",
             "windows": {
-                "program": "${workspaceFolder}/main_lss_71_01.exe",
+                "program": "${workspaceFolder}/main.exe",
             },
             "linux": {
-                "program": "${workspaceFolder}/main_lss_71_01",
+                "program": "${workspaceFolder}/main",
             },
             "args": [
                 "input.txt",
