@@ -25,7 +25,7 @@ int maxColIdx(int n, int k, double *A) {
     return colIdx;
 }
 
-void swapCols(int n, int k, int idx, double *A, int *cols) {
+void swapCols(int n, int k, int idx, double *A, int *colsOrder) {
     int i = 0;
     double tmp;
 
@@ -39,18 +39,19 @@ void swapCols(int n, int k, int idx, double *A, int *cols) {
 
     // Перестановка номеров колонок
 
-    tmp = cols[k];
-    cols[k] = cols[idx];
-    cols[idx] = tmp;
+    tmp = colsOrder[k];
+    colsOrder[k] = colsOrder[idx];
+    colsOrder[idx] = tmp;
 }
 
-void printCols(int n, int *cols) {
+void printColsOrder(int n, int *colsOrder) {
     int k;
 
     printf("\ncols: ");
     for (k = 0; k < n; k++) {
-        printf("%d ", cols[k]);
+        printf("%d ", colsOrder[k]);
     }
+    printf("\n");
 }
 
 void printX(int n, double *X) {
@@ -58,19 +59,20 @@ void printX(int n, double *X) {
 
     printf("\n   X: ");
     for (k = 0; k < n; k++) {
-        printf("%lf ", X[k]);
+        printf("%1.3lf\t", X[k]);
     }
+    printf("\n");
 }
 
 int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
     int i = 0, k = 0, j = 0, idx = 0;
-    int *cols = (int *)tmp;
+    int *colsOrder = (int *)tmp;
     double t, sum = 0, divider = 1, multiplier = 0;
 
     // Запомнить позиции колонок и проинициализировать вектор X
 
     for (int i = 0; i < n; i++) {
-        cols[i] = i;
+        colsOrder[i] = i;
         X[i] = -1;
     }
 
@@ -86,11 +88,15 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
 
             if (fabs(B[k]) > EPS) {
                 if (flag_debug) {
+                    printX(n, X);
                     printf("\nSystem has no solution\n");
                 }
                 return 1;
             }
             X[k] = 0;
+            if (flag_debug) {
+                printX(n, X);
+            }
             continue;
         }
 
@@ -101,15 +107,12 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
         }
 
         if (idx != k) {
-            swapCols(n, k, idx, A, cols);
+            swapCols(n, k, idx, A, colsOrder);
 
             if (flag_debug) {
-                printf("%d <-> %d\n\n", k, idx);
+                printf("\n%d <-> %d\n", k, idx);
+                printSystem(n, A, B);
             }
-        }
-
-        if (flag_debug) {
-            printSystem(n, A, B);
         }
 
         for (i = k + 1; i < n; i++) {
@@ -136,35 +139,36 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
             }
             X[k] = (B[k] - sum) / A[k * n + k];
         }
+        if (flag_debug) {
+            printX(n, X);
+        }
     }
 
     // Перестановка элементов вектора-ответа
 
     if (flag_debug) {
-        printCols(n, cols);
+        printColsOrder(n, colsOrder);
         printX(n, X);
-        printf("\n\n");
     }
 
     for (i = 0; i < n; i++) {
         for (j = i; j < n; j++) {
-            if ((int)cols[j] == i) {
+            if (colsOrder[j] == i) {
                 t = X[i];
                 X[i] = X[j];
                 X[j] = t;
 
-                t = cols[i];
-                cols[i] = cols[j];
-                cols[j] = t;
+                t = colsOrder[i];
+                colsOrder[i] = colsOrder[j];
+                colsOrder[j] = t;
 
                 break;
             }
         }
 
         if (flag_debug) {
-            printCols(n, cols);
+            printColsOrder(n, colsOrder);
             printX(n, X);
-            printf("\n\n");
         }
     }
 

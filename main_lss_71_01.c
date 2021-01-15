@@ -150,14 +150,15 @@ void printHelp() {
 
 void printSystem(int n, const double *A, const double *B) {
     int i, j;
+
+    printf("\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            printf("%1.9lf ", A[i * n + j]);
+            printf("%1.3lf\t", A[i * n + j]);
         }
-        printf("\t%1.9lf", B[i]);
+        printf("\t%1.3lf", B[i]);
         printf("\n");
     }
-    printf("\n");
 }
 
 int main(int argc, char *argv[]) {
