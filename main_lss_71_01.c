@@ -279,7 +279,7 @@ int main(int argc, char *argv[]) {
     double timeSpent = (double)(end - begin) / CLOCKS_PER_SEC;
 
     if (flag_time) {
-        printf("Execution time: %1.9lf\n", timeSpent);
+        printf("\nExecution time: %1.9lf\n", timeSpent);
     }
 
     writeAnswer(outputFile, n, X, result);
