@@ -6,7 +6,8 @@
             "command": "gcc",
             "args": [
                 "-g",
-                "*.c",
+                "main_lss_71_01.c",
+                "lss_71_01.c",
                 "-o",
                 "main"
             ],

@@ -121,11 +121,11 @@ int readInput(char const *inputFile, double **A, double **B, int *n) {
     return 0;
 }
 
-void writeAnswer(char const *outputFile, int n, const double *X, int result) {
+void writeAnswer(char const *outputFile, int n, const double *X, int noSolution) {
     int i;
     FILE *output = fopen(outputFile, "w");
 
-    if (result != 0) {
+    if (noSolution != 0) {
         fprintf(output, "%d\n", 0);
     } else {
         fprintf(output, "%d\n", n);
@@ -154,15 +154,15 @@ void printSystem(int n, const double *A, const double *B) {
     printf("\n");
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
-            printf("%1.3lf\t", A[i * n + j]);
+            printf("%1.9lf\t", A[i * n + j]);
         }
-        printf("\t%1.3lf", B[i]);
+        printf("\t%1.9lf", B[i]);
         printf("\n");
     }
 }
 
 int main(int argc, char *argv[]) {
-    int n = 0, setInput = 0, i = 0, result = 0;
+    int n = 0, setInput = 0, i = 0, noSolution = 0;
     double *A, *B, *X, *tmp;
     char *inputFile = "lss_71_01_in.txt";
     char *outputFile = "lss_71_01_out.txt";
@@ -269,7 +269,7 @@ int main(int argc, char *argv[]) {
         printSystem(n, A, B);
     }
 
-    result = lss_71_01(n, A, B, X, tmp);
+    noSolution = lss_71_01(n, A, B, X, tmp);
     clock_t end = clock();
 
     if (flag_print_matrix) {
@@ -282,10 +282,10 @@ int main(int argc, char *argv[]) {
         printf("\nExecution time: %1.9lf\n", timeSpent);
     }
 
-    writeAnswer(outputFile, n, X, result);
+    writeAnswer(outputFile, n, X, noSolution);
 
     free(tmp);
     free(X);
 
-    return result;
+    return noSolution;
 }
