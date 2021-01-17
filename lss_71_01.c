@@ -160,6 +160,9 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
     }
 
     for (i = 0; i < n; i++) {
+        if (colsOrder[i] == i) {
+            continue;
+        }
         for (j = i; j < n; j++) {
             if (colsOrder[j] == i) {
                 t = X[i];
