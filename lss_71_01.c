@@ -11,6 +11,22 @@ extern int flag_debug;
 
 size_t lss_memsize_71_01(int n) { return n * sizeof(double); }
 
+double KahanSum(const double *X, unsigned int n) {
+    double sum = 0.0f;
+    double y, t;      // Temporary values.
+    double c = 0.0f;  // A running compensation for lost low-order bits.
+    unsigned int i = 0;
+
+    for (i = 0; i < n; ++i) {
+        y = X[i] - c;       // So far, so good: c is zero.
+        t = sum + y;        // Alas, sum is big, y small, so low-order digits of y are lost.
+        c = (t - sum) - y;  // (t - sum) recovers the high-order part of y; subtracting y recovers -(low part of y)
+        sum = t;            // Algebraically, c should always be zero. Beware overly-aggressive optimizing compilers!
+    }
+
+    return sum;
+}
+
 int maxColIdx(int n, int k, double *A) {
     int j = 0, colIdx = -1;
     double max = 0;
@@ -136,12 +152,19 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
         }
     }
 
+    double *temp = malloc(n * sizeof(double));
+
     // Обратный ход
     for (k = n - 1; k > -1; k--) {
         sum = 0;
-        for (j = k + 1; j < n; j++) {
-            sum += A[k * n + j] * X[j];
+        for (j = 0; j < n; j++) {
+            temp[j] = A[k * n + j] * X[j];
         }
+        // for (j = k + 1; j < n; j++) {
+        //     sum += A[k * n + j] * X[j];
+        // }
+        sum = KahanSum(temp, n);
+
         if (fabs(A[k * n + k]) > EPS) {
             X[k] = (B[k] - sum) / A[k * n + k];
         } else {
