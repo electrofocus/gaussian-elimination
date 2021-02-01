@@ -77,20 +77,6 @@ void printX(int n, double *X) {
     printf("\n");
 }
 
-double two_prod(double *t, double a, double b) {
-    double p = a * b;
-    *t = fma(a, b, -p);  // t = a*b-p, не забудьте подключить <cmath>
-    return p;
-}
-
-double two_sum(double *t, double a, double b) {
-    double s = a + b;
-    double bs = s - a;
-    double as = s - bs;
-    *t = (b - bs) + (a - as);
-    return s;
-}
-
 int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
     int i = 0, k = 0, j = 0, idx = 0, last = n;
     int *colsOrder = (int *)tmp;
@@ -140,9 +126,9 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
             multiplier = A[i * n + k] / A[k * n + k];
 
             for (j = k; j < n; j++) {
-                A[i * n + j] = two_sum(&t_2, A[i * n + j], -(two_prod(&t_1, A[k * n + j], multiplier) + t_1)) + t_2;
+                A[i * n + j] = A[i * n + j] - A[k * n + j] * multiplier;
             }
-            B[i] = two_sum(&t_2, B[i], -(two_prod(&t_1, B[k], multiplier) + t_1)) + t_2;
+            B[i] = B[i] - B[k] * multiplier;
         }
 
         if (flag_debug) {
@@ -154,7 +140,7 @@ int lss_71_01(int n, double *A, double *B, double *X, double *tmp) {
     for (k = n - 1; k > -1; k--) {
         sum = 0;
         for (j = k + 1; j < n; j++) {
-            sum += two_prod(&t_1, A[k * n + j], X[j]) + t_1;
+            sum += A[k * n + j] * X[j];
         }
         if (fabs(A[k * n + k]) > EPS) {
             X[k] = (B[k] - sum) / A[k * n + k];
