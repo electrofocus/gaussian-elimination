@@ -6,7 +6,7 @@
 
 #include <math.h>
 
-double const EPS = 1e-8;
+double const EPS = 1e-9;
 extern int flag_debug;
 
 size_t lss_memsize_71_01(int n) { return n * sizeof(double); }
